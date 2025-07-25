@@ -11,7 +11,7 @@ Your goal is to design a resilient backend that:
 
 # Request & Data Flow
 
-```
+
 1. **User** sends a request to `/weather?city=Lisbon`.
 2. **WeatherController** receives the request.
 3. **WeatherService**:
@@ -28,7 +28,6 @@ Your goal is to design a resilient backend that:
         a. Uses Circuit Breaker to call external API.
         b. On success: caches and returns the list.
         c. On failure: returns error (status 500).
-```
 
 
 ## 🌤️ Weather API Endpoint
@@ -95,18 +94,18 @@ Fetch today’s weather forecast for a city name or partial city name. The endpo
 ```
 
 ### Field Descriptions
-```
-	•	weather
-     Object with the forecast for the best-matched city for today.
-       •	The weather.weather array contains 24 hourly weather objects.
-       •	Weather for each city is cached for 1 day.
-  •	source
-     String. "cache" if data is served from local cache, "live" if freshly fetched from the external weather provider.
-  •	cities
-      Array of city objects matching the input search, intended for autocomplete or disambiguation in the frontend UI.
-        •	The first element is usually the city used for the weather forecast.
-        •	City autocomplete results are cached for 1 week per search term.
-```
+- **`weather`**
+  - Object with the forecast for the best-matched city for today.
+    - The `weather.weather` array contains 24 hourly weather objects.
+    - Weather data for each city is **cached for 1 day**.
+
+- **`source`**
+  - String. `"cache"` if data is served from local cache, `"live"` if freshly fetched from the external weather provider.
+
+- **`cities`**
+  - Array of city objects matching the input search, intended for autocomplete or disambiguation in the frontend UI.
+    - The **first element** is usually the city used for the weather forecast.
+    - City autocomplete results are **cached for 1 week** per search term.
 
 
 ### Usage Notes
