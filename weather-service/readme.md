@@ -28,6 +28,92 @@ Your goal is to design a resilient backend that:
         c. On failure: returns error (status 500).
 
 
+
+## 🌤️ Weather API Endpoint
+
+### `GET /api/v1/weather?city={cityQuery}`
+
+Fetch today’s weather forecast for a city name or partial city name. The endpoint also returns an array of matching city suggestions for autocomplete.
+
+**Weather data and city autocomplete suggestions are both cached to ensure high performance and minimize external API usage.**
+
+---
+
+#### **Query Parameters**
+| Name      | Type   | Required | Description                           |
+|-----------|--------|----------|---------------------------------------|
+| `city`    | string | yes      | City name or fragment for search.     |
+
+---
+
+#### **Example Response**
+
+```json
+{
+  "weather": {
+    "city": "Hamburg",
+    "country": "Germany",
+    "date": "2025-07-25",
+    "last_updated": "2025-07-25T11:45:00.000Z",
+    "sunrise": "05:25 AM",
+    "sunset": "09:28 PM",
+    "weather": [
+      {
+        "hour": 0,
+        "temperature": 17.1,
+        "condition": "Mist",
+        "condition_icon": "//cdn.weatherapi.com/weather/64x64/night/143.png",
+        "wind_kph": 12.2,
+        "wind_dir": "W",
+        "humidity": 96,
+        "precip_mm": 0,
+        "cloud": 91,
+        "feelslike": 17.1,
+        "will_it_rain": false,
+        "chance_of_rain": 0,
+        "uv": 0
+      }
+      // ... up to 23, one per hour
+    ]
+  },
+  "source": "live", // or "cache"
+  "cities": [
+    {
+      "id": 585936,
+      "name": "Hamburg",
+      "region": "Hamburg",
+      "country": "Germany",
+      "lat": 53.55,
+      "lon": 10,
+      "url": "hamburg-hamburg-germany"
+    },
+    ...
+  ]
+}
+```
+
+### Field Descriptions
+	•	weather
+     Object with the forecast for the best-matched city for today.
+       •	The weather.weather array contains 24 hourly weather objects.
+       •	Weather for each city is cached for 1 day.
+  •	source
+     String. "cache" if data is served from local cache, "live" if freshly fetched from the external weather provider.
+  •	cities
+      Array of city objects matching the input search, intended for autocomplete or disambiguation in the frontend UI.
+        •	The first element is usually the city used for the weather forecast.
+        •	City autocomplete results are cached for 1 week per search term.
+
+
+### Usage Notes
+	•	When a user types a city name (full or partial), the API will:
+	•	Return the best-matched city’s weather in weather.
+	•	Return a list of matching cities in cities, for the frontend to use as autocomplete or to offer the user options in case of ambiguity.
+	•	Both weather and city lists are cached to maximize speed and respect external API rate limits.
+	•	Data will refresh automatically if not present or when the cache expires.
+
+
+
 # 🚀 How to Run
 
 1. **Start Redis (using Docker):**
