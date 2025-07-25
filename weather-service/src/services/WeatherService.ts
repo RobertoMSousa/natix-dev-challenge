@@ -107,7 +107,7 @@ export class WeatherService {
             const data = await response.json() as CityResult[];
 
             await this.setCityCache(city, data);
-            return { ...data, source: 'live' };
+            return data;
         } catch (error: any) {
             throw new Error(`Failed to fetch weather data: ${error.message || error}`);
         }
