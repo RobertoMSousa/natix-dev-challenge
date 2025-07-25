@@ -49,8 +49,6 @@ export class WeatherController {
             const data = await this.weatherService.getWeather(city);
             res.json({ ...data, cities });
 
-            // Respond with the retrieved weather data as JSON
-            res.json(data);
         } catch (err: any) {
             // Handle any errors thrown during processing
             // Respond with error status or 500 if not specified
