@@ -9,23 +9,24 @@ Your goal is to design a resilient backend that:
 
 
 
-# Diagram and Algorithm
+# Request & Data Flow
+
 ```
-	1.	User sends request to /weather?city=Lisbon.
-	2.	WeatherController receives the request.
-	3.	WeatherService:
-     -	Check cache: Looks up Redis for key weather:lisbon:YYYY-MM-DD.
-     -	If cache hit: Returns data. (TTL 1 Day)
-     - If cache miss:
-      a. Uses Circuit Breaker (CB) to call the external WeatherAPI
-      b. On success: caches and returns result
-      c. On failure: returns error (status 500)
-  4.	CityService (for autocomplete):
-    -	Check cache: Looks up Redis for key city:lisbon.
-    -	If cache hit: Returns city list.
-    -	If cache miss: (TTL 1 Week)
-        a. Uses CB to call external API.
-        b. On success: caches and returns list.
+1. **User** sends a request to `/weather?city=Lisbon`.
+2. **WeatherController** receives the request.
+3. **WeatherService**:
+    - **Check cache:** Looks up Redis for key `weather:lisbon:YYYY-MM-DD`.
+    - **If cache hit:** Returns cached data (TTL: 1 day).
+    - **If cache miss:**
+        a. Uses Circuit Breaker (CB) to call the external Weather API.
+        b. On success: caches and returns the result.
+        c. On failure: returns error (status 500).
+4. **CityService** (for autocomplete):
+    - **Check cache:** Looks up Redis for key `city:lisbon`.
+    - **If cache hit:** Returns cached city list.
+    - **If cache miss:** (TTL: 1 week)
+        a. Uses Circuit Breaker to call external API.
+        b. On success: caches and returns the list.
         c. On failure: returns error (status 500).
 ```
 
