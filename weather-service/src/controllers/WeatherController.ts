@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { WeatherService } from '../services/WeatherService';
+import { CityService } from '../services/CityService';
 
 /**
  * Controller responsible for handling weather-related HTTP requests.
@@ -11,7 +12,7 @@ export class WeatherController {
      * Initializes the controller with a WeatherService instance.
      * @param weatherService - Service to fetch weather data.
      */
-    constructor(private weatherService: WeatherService) { }
+    constructor(private weatherService: WeatherService, private cityService: CityService) { }
 
     /**
      * Handles fetching weather information for a given city.
@@ -34,7 +35,19 @@ export class WeatherController {
             }
 
             // Fetch weather data using the WeatherService
+            // const data = await this.weatherService.getWeather(city);
+
+            const cities = await this.cityService.getCity(city);
+
+            // Optionally pick one city from the list (e.g., by ID, or the first match)
+            // const selectedCity = cities[0];
+            if (cities.length < 1) {
+                return res.status(404).json({ error: 'City not found' });
+            }
+
+            // Pass the selected city's name or id/coords to WeatherService
             const data = await this.weatherService.getWeather(city);
+            res.json({ ...data, cities });
 
             // Respond with the retrieved weather data as JSON
             res.json(data);
