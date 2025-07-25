@@ -39,3 +39,13 @@ export type WeatherResponse = {
     source: "cache" | "live";
     error: string | null;
 };
+
+export type CityResult = {
+    id: number;
+    name: string;
+    region: string;
+    country: string;
+    lat: number;
+    lon: number;
+    url: string;
+};

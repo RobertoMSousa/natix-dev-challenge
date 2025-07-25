@@ -6,12 +6,20 @@ export class WeatherController { // do not control the weather :-D
 
     async fetchWeather(req: Request, res: Response) {
 
-        const city = req.query.city as string;  // <-- Grab the query parameter
 
-        if (!city) {
-            return res.status(400).json({ error: 'City is required' });
+        try {
+            const city = req.query.city as string;  // <-- Grab the query parameter
+
+            if (!city) {
+                return res.status(400).json({ error: 'City is required' });
+            }
+            const data = await this.weatherService.getWeather(city);
+            res.json(data);
+        } catch (err: any) {
+            res.status(err.status || 500).json({
+                error: err.message || 'Unknown server error',
+                detail: err.detail || undefined,
+            });
         }
-        const data = await this.weatherService.getWeather(city);
-        res.json(data);
     }
 }
