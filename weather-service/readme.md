@@ -10,15 +10,16 @@ Your goal is to design a resilient backend that:
 
 
 # Diagram and Algorithm
+```
 	1.	User sends request to /weather?city=Lisbon.
 	2.	WeatherController receives the request.
 	3.	WeatherService:
      -	Check cache: Looks up Redis for key weather:lisbon:YYYY-MM-DD.
      -	If cache hit: Returns data. (TTL 1 Day)
      - If cache miss:
-      a. Uses Circuit Breaker (CB) to call the external WeatherAPI.
-      b. On success: caches and returns result.
-      c. On failure: returns error (status 500).
+      a. Uses Circuit Breaker (CB) to call the external WeatherAPI
+      b. On success: caches and returns result
+      c. On failure: returns error (status 500)
   4.	CityService (for autocomplete):
     -	Check cache: Looks up Redis for key city:lisbon.
     -	If cache hit: Returns city list.
@@ -26,7 +27,7 @@ Your goal is to design a resilient backend that:
         a. Uses CB to call external API.
         b. On success: caches and returns list.
         c. On failure: returns error (status 500).
-
+```
 
 
 ## 🌤️ Weather API Endpoint
@@ -93,6 +94,7 @@ Fetch today’s weather forecast for a city name or partial city name. The endpo
 ```
 
 ### Field Descriptions
+```
 	•	weather
      Object with the forecast for the best-matched city for today.
        •	The weather.weather array contains 24 hourly weather objects.
@@ -103,6 +105,7 @@ Fetch today’s weather forecast for a city name or partial city name. The endpo
       Array of city objects matching the input search, intended for autocomplete or disambiguation in the frontend UI.
         •	The first element is usually the city used for the weather forecast.
         •	City autocomplete results are cached for 1 week per search term.
+```
 
 
 ### Usage Notes
