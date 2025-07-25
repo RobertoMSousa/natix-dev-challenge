@@ -74,6 +74,10 @@ The project includes comprehensive unit tests for the service layer, focusing on
 
   3. Logging with Winston for errors, circuit breaker events, cache misses, and API failures.
 
+  4. OpenAPI/Swagger Docs
+
+  5. Code Coverage
+
 
 
 ## Context and Scope
