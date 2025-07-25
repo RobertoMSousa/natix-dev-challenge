@@ -122,10 +122,8 @@ export class WeatherService {
 
         // get the auto complete list and cache it
         let cachedCities = await this.getCityFromCache(city);
-        console.log("🚀  roberto --  ~ WeatherService ~ getWeather ~ cachedCities 1:", cachedCities)
         if (!cachedCities) {
             cachedCities = await this.breaker.exec(() => this.getCityListExternalAPI(city));
-            console.log("🚀  roberto --  ~ WeatherService ~ getWeather ~ cachedCities 2:", cachedCities)
         }
 
         // 1. Try cache
@@ -137,7 +135,6 @@ export class WeatherService {
         // 2. If not cached, call API
         try {
             const data = await this.breaker.exec(() => this.getWeatherExternalAPI(city, today));
-            console.log("🚀  roberto --  ~ WeatherService ~ getWeather ~ data:", data)
             return { weather: data, cities: cachedCities, source: "live" };
         } catch (err) {
             // Handle circuit open (fallback to cache, return error, etc)

@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { WeatherService } from '../services/WeatherService';
 
-export class WeatherController { // do not control the weather :-D
+export class WeatherController { // WARNING: do not control the weather :-D
     constructor(private weatherService: WeatherService) { }
 
     async fetchWeather(req: Request, res: Response) {
 
-
         try {
-            const city = req.query.city as string;  // <-- Grab the query parameter
+            const city = req.query.city as string;
 
             if (!city) {
                 return res.status(400).json({ error: 'City is required' });
